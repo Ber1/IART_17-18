@@ -1,17 +1,16 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
-
+:- use_module(library(lists)).
 :- reconsult(problem).
 
 /***********************************
 A* ALGORITHM
 ***********************************/
+/*
 
-/*heuristica*/
 h(local(_,_,N),H):-
   estado_final(local(_,_,Nf)),
   H is Nf-N.
 
-/*caso base*/
 astar([ (_,_,[E-P|Cam]) |_],[E-P|Cam],_):-
   estado_final(E).
 
@@ -35,7 +34,45 @@ sucessor_final(Ls,NewLS,_,G,[E-OldPonto|Can]):-
 solve_astar(Sol):-
   estado_inicial(Ei),h(Ei,Hi),
   astar([(Hi,0,[Ei-''])],Sol,[]).
+*/
+average( List, Average ):- 
+    sumlist( List, Sum ),
+    length( List, Length ),
+    Length > 0, 
+    Average is Sum / Length.
 
+/*heuristica*/
+h([Locais,Pontos],H):-
+  findall(C,(member(local(XL,YL,_),Locais),member(ponto(XP,YP,_),Pontos),C is abs(XL-XP)+abs(YL-YP)),Costs1),
+  findall(C,(member(local(XL,YL,_),Locais),local_final(XP,YP),C is abs(XL-XP)+abs(YL-YP)),Costs2),
+  append(Costs1,Costs2,Costs),
+  average(Costs,AverageCostOfATrip),
+  findall(NPeople,member(local(_,_,NPeople),Locais),TotalPeople),
+  sumlist( TotalPeople, SumTotalPeople ),
+  capacidade_veiculos(VehiclesCapacity),
+  NumberOfTrips is SumTotalPeople/VehiclesCapacity,
+  H is AverageCostOfATrip*NumberOfTrips.
+  
+  
+
+/*caso base*/
+astar([ (_,_,[E|Cam]) |_],[E|Cam]):-
+  estado_final(E).
+
+
+astar(F,G,[[E|Can]|R],Sol):-
+    write(E:F:G),nl,
+    /*if we remove H2, we have uniform search*/
+    findall(F2,G2,[E2|[E|Can]] ,(sucessor(E,E2,C),G2 is G+C,h(E2,H2),F2 is G2+H2), Ls),
+    append(R,Ls,L2),
+    sort(L2,L2ord),
+    astar(L2ord,Sol).
+
+
+solve_astar(Sol):-
+  estado_inicial(Ei),h(Ei,Hi),
+  write(Hi).
+  %astar([(Hi,0,[Ei])],Sol).
 /***********************************
 BFS ALGORITHM
 ***********************************/
