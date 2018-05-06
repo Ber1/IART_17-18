@@ -32,6 +32,31 @@ sucessor_ponto_final(local(X,Y,N), local(X,Y,NN),C) :-
         C is (abs(X-LX)+abs(Y-LY)),
         capacidade_veiculos(Capacidade),
         NN is N+Capacidade.*/
+
+sucessor(Locais,Pontos, NewE,local(XL,YL,NP),ponto(XP,YP,PP),PosLocal,PosPonto,C):-
+        NP>0,
+        capacidade_veiculos(CV),
+        Capacity is CV-PP,
+        NP>=Capacity,
+        NewNP is NP-Capacity,
+        replace(PosLocal,Locais,local(XL,YL,NewNP),NewLocais),
+        local_final(LFX,LFY),
+        replace(PosPonto,Pontos,ponto(LFX,LFY,0),NewPontos),
+        NewE = [NewLocais,NewPontos],
+        C is abs(XL-XP)+abs(YL-YP).
+
+sucessor(Locais,Pontos, NewE,local(XL,YL,NP),ponto(XP,YP,PP),PosLocal,PosPonto,C):-
+        NP>0,
+        capacidade_veiculos(CV),
+        Capacity is CV-PP,
+        NP<Capacity,
+        NewPP is PP+NP,
+        replace(PosLocal,Locais,local(XL,YL,0),NewLocais),
+        replace(PosPonto,Pontos,ponto(XL,YL,NewPP),NewPontos),
+        NewE = [NewLocais,NewPontos],
+        C is abs(XL-XP)+abs(YL-YP).
+        
+
         
 
 

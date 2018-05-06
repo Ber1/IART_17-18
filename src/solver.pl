@@ -2,7 +2,7 @@
 :- reconsult(algorithms).
 
 
-solve_problem(Sol):-
+solve_problem:-
         retractall(estado_final(_)),
         retractall(estado_inicial(_)),
         findall(LocalX,local_inicial(LocalX),Locais),
@@ -11,6 +11,7 @@ solve_problem(Sol):-
         findall(LocalX, (local_inicial(local(X,Y,_)),LocalX= local(X,Y,0)),Locais_final),
         findall(PontoX, (ponto_estrategico(_), PontoX= ponto(_,_,0)),Pontos_final),
         assert(estado_final([Locais_final, Pontos_final])),
-        solve_astar(Sol).
+        solve_astar(Sol),
+        write(Sol).
         
 

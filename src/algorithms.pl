@@ -41,6 +41,10 @@ average( List, Average ):-
     Length > 0, 
     Average is Sum / Length.
 
+replace(I, L, E, K) :-
+  nth0(I, L, _, R),
+  nth0(I, K, E, R).
+
 /*heuristica*/
 h([Locais,Pontos],H):-
   findall(C,(member(local(XL,YL,_),Locais),member(ponto(XP,YP,_),Pontos),C is abs(XL-XP)+abs(YL-YP)),Costs1),
@@ -59,11 +63,12 @@ h([Locais,Pontos],H):-
 astar([ (_,_,[E|Cam]) |_],[E|Cam]):-
   estado_final(E).
 
-
-astar(F,G,[[E|Can]|R],Sol):-
-    write(E:F:G),nl,
-    /*if we remove H2, we have uniform search*/
-    findall(F2,G2,[E2|[E|Can]] ,(sucessor(E,E2,C),G2 is G+C,h(E2,H2),F2 is G2+H2), Ls),
+astar([(_,G,[[Locais,Pontos]|Can])|R],Sol):-
+    findall((F2,G2,[E2|[[Locais,Pontos]|Can]]),
+            (nth0(PosLocal,Locais,Local),nth0(PosPonto,Pontos,Ponto),
+             sucessor(Locais,Pontos,E2,Local,Ponto,PosLocal,PosPonto,C),
+             G2 is G+C,h(E2,H2),F2 is G2+H2), 
+            Ls),
     append(R,Ls,L2),
     sort(L2,L2ord),
     astar(L2ord,Sol).
@@ -71,8 +76,7 @@ astar(F,G,[[E|Can]|R],Sol):-
 
 solve_astar(Sol):-
   estado_inicial(Ei),h(Ei,Hi),
-  write(Hi).
-  %astar([(Hi,0,[Ei])],Sol).
+  astar([(Hi,0,[Ei])],Sol).
 /***********************************
 BFS ALGORITHM
 ***********************************/
