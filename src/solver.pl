@@ -12,6 +12,7 @@ solve_problem:-
         findall(PontoX, (ponto_estrategico(_), PontoX= ponto(_,_,0)),Pontos_final),
         assert(estado_final([Locais_final, Pontos_final])),
         solve_astar(Sol),
-        write(Sol).
-        
-
+        print_sol(Sol).
+       
+print_sol([]).        
+print_sol([H|T]):-print_sol(T),write(H),nl.
