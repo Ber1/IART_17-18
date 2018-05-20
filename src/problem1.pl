@@ -1,10 +1,12 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
 
+
+/* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
+
 %montanhas onde existem pessoas para evacuar
 %local(Coordenada X, Coordenada Y, número de turistas por evacuar)
-local_inicial(local(0,1,20)).
-local_inicial(local(1,2,25)).
-local_inicial(local(10,2,20)).
+local_inicial(local(0,1,17)).
+local_inicial(local(1,2,23)).
 
 /*local de abrigo*/
 %local_final(Coordenada X, Coordenada Y)
@@ -21,6 +23,13 @@ ponto_estrategico(ponto(4,3,0)).
 ponto_estrategico(ponto(5,4,0)).
 ponto_estrategico(ponto(6,1,0)).
 ponto_estrategico(ponto(7,2,0)).
+
+ponto_estrategico(ponto(1,2,0)).
+ponto_estrategico(ponto(2,3,0)).
+ponto_estrategico(ponto(3,4,0)).
+ponto_estrategico(ponto(4,4,0)).
+ponto_estrategico(ponto(1,6,0)).
+ponto_estrategico(ponto(2,7,0)).
 
 
         
