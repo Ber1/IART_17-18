@@ -1,10 +1,15 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
 
-%locais onde existem pessoas para evacuar
-local_inicial(local(0,1,25)).
+%montanhas onde existem pessoas para evacuar
+%local(Coordenada X, Coordenada Y, número de turistas por evacuar)
+local_inicial(local(0,1,20)).
 local_inicial(local(1,2,25)).
+
+/*local de abrigo*/
+%local_final(Coordenada X, Coordenada Y)
 local_final(10,1).
 
+%capacidade dos véiculos utilizados para evacuar turistas
 capacidade_veiculos(5).
 
 %ponto estratégicos

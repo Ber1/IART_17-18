@@ -1,25 +1,41 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
 :- use_module(library(lists)).
 
-/***********************************
-A* ALGORITHM
-***********************************/
 
+/*-------------------------------------------------------
+* calcula a média dos valores numa lista
+-------------------------------------------------------*/
 average( List, Average ):- 
     sumlist( List, Sum ),
     length( List, Length ),
     Length > 0, 
     Average is ceiling(Sum / Length).
 
+/*-------------------------------------------------------
+*Troca um elemento de uma lista
+*I-> indice
+*L -> Lista
+*E -> Elemento que irá substituir o antigo
+*K -> nova lista 
+-------------------------------------------------------*/
 replace(I, L, E, K) :-
   nth0(I, L, _, R),
   nth0(I, K, E, R).
+
+/*-------------------------------------------------------
+*troca num estado o número de turistas de todas as montanhas para 0, devolve o novo estado
+-------------------------------------------------------  */
 
 replaceAllLocais([],[]).
 replaceAllLocais([local(X,Y,_)|T1], [local(X,Y,0)|T2]):-
         replaceAllLocais(T1,T2).
 
-/*heuristica*/
+/*-------------------------------------------------------
+*Função heuristica que prevê o custo necessário para atingir o estado final dado um estado
+*[Locais,Pontos]-> Estado
+* H -> heurística
+-------------------------------------------------------*/
+
 h([Locais,Pontos],H):-
   findall(C1,(member(local(XL,YL,_),Locais),member(ponto(XP,YP,_),Pontos),C1 is abs(XL-XP)+abs(YL-YP)),Costs1),
   findall(C2,(member(local(XL2,YL2,_),Locais),local_final(XP2,YP2),C2 is abs(XL2-XP2)+abs(YL2-YP2)),Costs2),
@@ -31,6 +47,9 @@ h([Locais,Pontos],H):-
   NumberOfTrips is ceiling(SumTotalPeople/VehiclesCapacity),
   H is ceiling(AverageCostOfATrip*NumberOfTrips).
 
+/*-------------------------------------------------------
+*Verifica se um estado pode ser considerado o estado final
+-------------------------------------------------------*/
 estado_final([Locais,Pontos]):-
         checkLocais(Locais),!,checkPontos(Pontos).
 
@@ -59,6 +78,9 @@ checkPontos([]).
 checkPontos([ponto(_,_,NP)|T]):- NP==0, checkPontos(T).
   
 
+/***********************************
+A* ALGORITHM
+***********************************/
 /*caso base*/
 astar([ (_,_,[E|Cam]) |_],[E|Cam]):-
   estado_final(E).
@@ -80,8 +102,9 @@ solve_astar(Sol):-
 
 
 
-
-
+/***********************************
+Funções de transição
+***********************************/
 sucessor(Locais,Pontos, NewE,local(XL,YL,NP),ponto(XP,YP,PP),PosLocal,PosPonto,C):-
         NP>0,
         capacidade_veiculos(CV),

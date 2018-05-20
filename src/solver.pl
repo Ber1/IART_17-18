@@ -4,7 +4,7 @@
 
 :- dynamic estado_inicial/1.
 
-
+/* Call this to solve the problem in question*/
 solve_problem:-
         retractall(estado_inicial(_)),
         findall(LocalX,local_inicial(LocalX),Locais),
@@ -12,6 +12,15 @@ solve_problem:-
         assert(estado_inicial([Locais, Pontos])),
         solve_astar(Sol),
         print_sol(Sol).
-       
+
+/* prints the solution to the problem in terminal*/       
 print_sol([]).        
 print_sol([H|T]):-write(H),nl,print_sol(T).
+
+/* Call this to solve the problem in question and check it's runtime
+* X -> Runtime
+*/
+runtime(X):-
+  solve_problem,      
+  statistics(runtime,A),
+  X= 'Runtime':A.
