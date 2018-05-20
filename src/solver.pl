@@ -15,3 +15,8 @@ solve_problem:-
        
 print_sol([]).        
 print_sol([H|T]):-write(H),nl,print_sol(T).
+
+runtime(X):-
+  solve_problem,      
+  statistics(runtime,A),
+  X= 'Runtime':A.

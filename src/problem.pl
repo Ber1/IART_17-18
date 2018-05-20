@@ -1,8 +1,8 @@
 /* -*- Mode:Prolog; coding:iso-8859-1; indent-tabs-mode:nil; prolog-indent-width:8; prolog-paren-indent:4; tab-width:8; -*- */
 
 %locais onde existem pessoas para evacuar
-local_inicial(local(0,1,12)).
-local_inicial(local(1,2,17)).
+local_inicial(local(0,1,30)).
+local_inicial(local(1,2,30)).
 local_final(10,1).
 
 capacidade_veiculos(5).
