@@ -20,7 +20,7 @@ replaceAllLocais([local(X,Y,_)|T1], [local(X,Y,0)|T2]):-
         replaceAllLocais(T1,T2).
 
 /*heuristica*/
-h1([Locais,Pontos],H):-
+h([Locais,Pontos],H):-
   findall(C1,(member(local(XL,YL,_),Locais),member(ponto(XP,YP,_),Pontos),C1 is abs(XL-XP)+abs(YL-YP)),Costs1),
   findall(C2,(member(local(XL2,YL2,_),Locais),local_final(XP2,YP2),C2 is abs(XL2-XP2)+abs(YL2-YP2)),Costs2),
   append(Costs1,Costs2,Costs),
@@ -30,19 +30,6 @@ h1([Locais,Pontos],H):-
   capacidade_veiculos(VehiclesCapacity),
   NumberOfTrips is ceiling(SumTotalPeople/VehiclesCapacity),
   H is ceiling(AverageCostOfATrip*NumberOfTrips).
-
-  h([Locais,Pontos],H):-
-        length(Pontos,LenghtP),
-        capacidade_veiculos(VehiclesCapacity),
-        findall(NPeople,member(local(_,_,NPeople),Locais),TotalPeople),
-        sumlist( TotalPeople, SumTotalPeople ),
-        NumberOfTrips is ceiling(SumTotalPeople/VehiclesCapacity),
-        NTripsFromLocalFinal is NumberOfTrips-LenghtP,
-        findall(C1,(member(local(XL,YL,_),Locais),member(ponto(XP,YP,_),Pontos),C1 is abs(XL-XP)+abs(YL-YP)),Costs1),
-        average(Costs1,AverageCostOfATripFromPoint),
-        findall(C2,(member(local(XL2,YL2,_),Locais),local_final(XP2,YP2),C2 is abs(XL2-XP2)+abs(YL2-YP2)),Costs2),
-        average(Costs2,AverageCostOfATripFromLocalFinal),
-        H is LenghtP*AverageCostOfATripFromPoint+NTripsFromLocalFinal*AverageCostOfATripFromLocalFinal.
 
 estado_final([Locais,Pontos]):-
         checkLocais(Locais),!,checkPontos(Pontos).
